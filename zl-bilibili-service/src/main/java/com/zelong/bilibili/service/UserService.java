@@ -8,6 +8,7 @@ import com.zelong.bilibili.domain.UserInfo;
 import com.zelong.bilibili.exception.ConditionException;
 import com.zelong.bilibili.service.utils.MD5Util;
 import com.zelong.bilibili.service.utils.RSAUtil;
+import com.zelong.bilibili.service.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +55,30 @@ public class UserService {
 
     public User getUserByPhone(String phone) {
         return userDao.getUserByPhone(phone);
+    }
+
+    public String login(User user) {
+        String phone = user.getPhone();
+        if (StringUtils.isNullOrEmpty(phone)) {
+            throw new ConditionException("Phone number should not be empty!");
+        }
+        User dbUser = this.getUserByPhone(phone);
+        if(dbUser == null) {
+            throw new ConditionException("User does not exist!");
+        }
+        String password = user.getPassword();
+        String rawPassword;
+        try {
+            rawPassword = RSAUtil.decrypt(password);
+        } catch (Exception e) {
+            throw new ConditionException("Failed to decrypt password!");
+        }
+        String salt = dbUser.getSalt();
+        String md5Password = MD5Util.sign(rawPassword, salt, "UFT-8");
+        if (!md5Password.equals(dbUser.getPassword())) {
+            throw new ConditionException("Incorrect password!");
+        }
+        TokenUtil tokenUtil = new TokenUtil();
+        return tokenUtil.generateToken(dbUser.getId());
     }
 }
