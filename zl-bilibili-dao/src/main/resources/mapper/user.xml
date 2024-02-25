@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zelong.bilibili.dao.UserDao">
+
+    <select id="getUserByPhone" parameterType="java.lang.String" resultType="com.zelong.bilibili.domain.User">
+        SELECT
+          *
+        FROM
+          t_user
+        WHERE
+          phone = #{phone}
+
+    </select>
+
+    <insert id="addUser" parameterType="com.zelong.bilibili.domain.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user
+        (
+          phone,
+          email,
+          password,
+          salt,
+          createTime
+        )
+        VALUES
+        (
+          #{phone},
+          #{email},
+          #{password},
+          #{salt},
+          #{createTime}
+        )
+
+    </insert>
+
+    <insert id="addUserInfo" parameterType="com.zelong.bilibili.domain.UserInfo">
+        INSERT INTO t_user_info
+        (
+          userId,
+          nick,
+          avatar,
+          sign,
+          gender,
+          birth,
+          createTime
+        )
+        VALUES
+        (
+          #{userId},
+          #{nick},
+          #{avatar},
+          #{sign},
+          #{gender},
+          #{birth},
+          #{createTime}
+        )
+
+
+    </insert>
+
+</mapper>
