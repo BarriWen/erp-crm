@@ -57,7 +57,7 @@ public class UserService {
         return userDao.getUserByPhone(phone);
     }
 
-    public String login(User user) {
+    public String login(User user) throws Exception {
         String phone = user.getPhone();
         if (StringUtils.isNullOrEmpty(phone)) {
             throw new ConditionException("Phone number should not be empty!");
@@ -78,7 +78,6 @@ public class UserService {
         if (!md5Password.equals(dbUser.getPassword())) {
             throw new ConditionException("Incorrect password!");
         }
-        TokenUtil tokenUtil = new TokenUtil();
-        return tokenUtil.generateToken(dbUser.getId());
+        return TokenUtil.generateToken(dbUser.getId());
     }
 }
