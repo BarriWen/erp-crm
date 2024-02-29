@@ -54,7 +54,26 @@
           #{createTime}
         )
 
-
     </insert>
+
+    <select id="getUserById" parameterType="java.lang.Long" resultType="com.zelong.bilibili.domain.User">
+        SELECT
+          *
+        FROM
+          t_user
+        WHERE
+          id = #{id}
+
+    </select>
+
+    <select id="getUserInfoByUserId" parameterType="java.lang.Long" resultType="com.zelong.bilibili.domain.UserInfo">
+        SELECT
+          *
+        FROM
+          t_user_info
+        WHERE
+          userId = #{userId}
+
+    </select>
 
 </mapper>

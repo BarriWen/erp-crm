@@ -1,5 +1,6 @@
 package com.zelong.bilibili.api;
 
+import com.zelong.bilibili.api.support.UserSupport;
 import com.zelong.bilibili.domain.JsonResponse;
 import com.zelong.bilibili.domain.User;
 import com.zelong.bilibili.service.UserService;
@@ -15,6 +16,16 @@ public class UserApi {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserSupport userSupport;
+
+    @GetMapping("/users")
+    public  JsonResponse<User> getUserInfo() {
+        Long userId = userSupport.getCurrentUserId();
+        User user = userService.getUserInfo(userId);
+        return new JsonResponse<>(user);
+    }
 
     @GetMapping("/rsa-pks")
     public JsonResponse<String> getRsaPublicKey() {
